@@ -29,7 +29,7 @@ var questions = [
     },
     {
         questionText: "Where is local storage?",
-        answerText: ["Around the corner", "Hiding inside your browser!", "Local storage? No such thing", "Hre, there, everywhere"]
+        answerText: ["Around the corner", "Hiding inside your browser!", "Local storage? No such thing", "Here, there, everywhere"]
     }
 ]
 
@@ -48,6 +48,15 @@ function startQuiz() {
 }  
 
 function runQuiz () {
+    for (i=0; i < questions.length; i++) {
+        questionOnDisplay.textContent = questions[i].questionText;
+        for (j=0; j < answerChoiceBank.length; j++) {
+            answerChoiceBank[j].textContent = questions[i].answerText[j];
+            answerChoices.appendChild(answerChoiceBank[j]);
+        }
+        console.log(questionOnDisplay);
+        console.log(answerChoices);
+    }
     //displayQuestions
     //displayAnswers
     //picks an answer with click
@@ -57,3 +66,4 @@ function runQuiz () {
     //this will run on a loop the length of the questions array.
     //endGame will be triggered upon this loop running out
 }
+runQuiz();
