@@ -167,6 +167,7 @@ returnButton.addEventListener("click", function() {
 
 clearButton.addEventListener("click", function() {
     localStorage.clear();
+    location.reload();
 })
 
 
