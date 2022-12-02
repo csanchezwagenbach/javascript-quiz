@@ -5,7 +5,8 @@ var answerChoicesDisplay = document.querySelector("#answer-list");
 var endGameDisplay = document.querySelector("#endgame-display");
 var initialsInput = document.querySelector("#user-initials-input");
 var submitButton = document.querySelector("#submit-button");
-
+var highScoreDisplay = document.querySelector("#highscore-display");
+var highScoreList = document.querySelector("#highscores");
 
 var answerChoiceOne = document.createElement("li");
 var answerChoiceTwo = document.createElement("li");
@@ -17,7 +18,7 @@ var userScoreReport = document.createElement("p");
 
 var questionCount = 0;
 var timerCount = 60;
-var userInitials = "";    
+
 
 var questions = [
     {
@@ -73,10 +74,25 @@ function endGame() {
 }
 
 function recordScore(event) {
-    event.preventDefault();
+    event.preventDefault();   
     userInitials = initialsInput.value;
+    var usersScores = {
+        initials: userInitials, 
+        score: timerCount,
+    };
+    localStorage.setItem("users scores", JSON.stringify(usersScores)); 
+    endGameDisplay.classList.remove("start");
+    endGameDisplay.classList.add("hidden");
+    highScoreDisplay.classList.remove("hidden");
+    highScoreDisplay.classList.add("start");
+    showHighScores();
 }
 
+function showHighScores() {
+    var highScores = {};
+    highScores = JSON.parse(localStorage.getItem("users scores"));
+    console.log(highScores.score);
+}
 
 function checkAnswer(userAnswer) {
     console.log(timerCount);
