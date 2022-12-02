@@ -13,18 +13,29 @@ var clearButton = document.querySelector("#clear-button");
 var viewHighScoresButton = document.querySelector("#view-highscore")
 var startButton = document.querySelector("#start-button");
 
+//I began by calling references to every HTML element that both I and the user would be interacting with throughout the application. As I worked through building this, the list continually got longer, and the above is the list of HTML elements engaged with throughout.
+
+//Here I dynamically created li elements and stored them to the answerChoice variables. I then put the empty li's into an array with the intention of populating them later with an answerText property.
+
 var answerChoiceOne = document.createElement("li");
 var answerChoiceTwo = document.createElement("li");
 var answerChoiceThree = document.createElement("li");
 var answerChoiceFour = document.createElement("li");
 var answerChoiceBank = [answerChoiceOne, answerChoiceTwo, answerChoiceThree, answerChoiceFour];
 
+//This dynamically created p element will report the users score to them upon finishing the quiz
+
 var userScoreReport = document.createElement("p");
+
+//questionCount will serve as the index that regulates which question is to be displayed throughout the application. Later, a click event on an answer choice will trigger questionCount to increment by 1, bringing up the next question display.
+
+//timer serves as the variable that will hold the setInterval function. timerCount initializes the timer at 60 seconds.
 
 var questionCount = 0;
 var timer;
 var timerCount = 60;
 
+//Below is an array of objects, where each object has a property that holds a questions text, the text belonging to each of its answer choices, as well as the text of the correct answer
 
 var questions = [
     {
@@ -49,6 +60,8 @@ var questions = [
     }
 ]
 
+//Sets the timer for the quiz. It will decrement by one every 1000 milliseconds, and if the timer hits 0 our questionCount index reaches the length of the questions array, the clock will stop.
+
 function setTimer () {
     timer = setInterval(function() {
         timerCount--;
@@ -60,6 +73,8 @@ function setTimer () {
     }, 1000);
 }
 
+//This function removes the initial display and presents the user with the first question. The function is triggered upon a click event on the start quiz button on the load screen.
+
 function startQuiz() {
     initialDisplay.classList.remove("start");
     initialDisplay.classList.add("hidden");
@@ -67,6 +82,8 @@ function startQuiz() {
     setTimer();
     renderQuiz();
 }  
+
+//This function serves to regulate which question and which answer choices are displayed. As questionCount increments, the referenced object in the questions array will increment. The text displayed dynamically updates upon questionCounts incrementation. Additionally, answerChoiceBank is populated using a for loop the length of its index to map answertexts from the question[questionCount]'s property. When questionCount reaches the length of the questions array, endGame is triggered.
 
 function renderQuiz () {
     if (questionCount < questions.length) {
@@ -82,6 +99,8 @@ function renderQuiz () {
     }
 }
 
+//endGame removes the questionDisplay, generates the endGame display and appends the users score. endGame display offers players the chance to enter their initials to be stored to a high score menu.
+
 function endGame() {
     questionsDisplay.classList.add("hidden");
     endGameDisplay.classList.remove("hidden");
@@ -89,6 +108,8 @@ function endGame() {
     userScoreReport.textContent = "You scored a " +timerCount +"!";
     endGameDisplay.appendChild(userScoreReport);
 }
+
+//recordScore adds the users score to an array of objects in local storage. This array holds objects with properties of initials and score, which holds previous users initials and scores. Current users information is stored in an object, local storage is retrieved, and the object is pushed into the array before the array itself is pushed back into local storage.
 
 function recordScore(event) {
     event.preventDefault();   
@@ -98,7 +119,6 @@ function recordScore(event) {
         score: timerCount,
         };
     var highScores = [usersScore];
-    console.log(highScores);
     var usersScores = JSON.parse(localStorage.getItem("users scores"));
     if (usersScores === null) {
     var allHighScores = highScores;
@@ -113,9 +133,10 @@ function recordScore(event) {
     showHighScores();
 }
 
+//showHighScores pulls the array of objects out of local storage, sorts the objects by comparing the values of their "score" property, resets the high score menu, then populates the waiting ol with the reorganized array presented as an indexed list, highest scores on top, lowest on the bottom.
+
 function showHighScores() {
     var highScores = JSON.parse(localStorage.getItem("users scores"));
-    console.log(highScores);
     function sortScores (a, b) {
         var scoreA = a.score;
         var scoreB = b.score;
@@ -128,7 +149,6 @@ function showHighScores() {
         }
     }
     highScores.sort(sortScores);
-    console.log(highScores);
     highScoreList.innerHTML = "";
     for (var i = 0; i < highScores.length; i++) {
         var newHighScore = document.createElement("li");
@@ -137,10 +157,9 @@ function showHighScores() {
     } 
 }
 
+//The function below runs upon a click event on any of the answer choices a user is displayed throughout the quiz. This function checks the target of the users click and compares the string held in that li with the string held in the "correctAnswer" property. If the question does not match, ten seconds are decremented and questionCount increments. If they do match, questionCount increments. If there are no more questions or the timer hits 0, endGame is triggered. renderQuiz runs in the former two situations, and with questionCount having incremented, renderQuiz generates a new question and a new set of answer choices. 
 
 function checkAnswer(userAnswer) {
-    console.log(timerCount);
-    //questionCount++;
     if (userAnswer !== questions[questionCount].correctAnswer && questionCount <= questions.length) {
     timerCount = timerCount - 10;
     questionCount++
@@ -153,7 +172,11 @@ function checkAnswer(userAnswer) {
     }
 }
 
+//Listens for click event on the start button when page loads.
+
 startButton.addEventListener("click", startQuiz);
+
+//Listens for click event on each of the answer choices during the quiz.
 
 answerChoicesDisplay.addEventListener("click", function (event) {
     if (event.target.matches("li")) {
@@ -161,7 +184,11 @@ answerChoicesDisplay.addEventListener("click", function (event) {
     }
 })
 
+//Listens for a click event on the submit button on endGame screen that allows user to share their initials
+
 submitButton.addEventListener("click", recordScore) 
+
+//Listens for a click event on the return button on highScoresDisplay. Resets the timer and sends user back to load page.
 
 returnButton.addEventListener("click", function() {
     highScoreDisplay.classList.remove("start");
@@ -172,10 +199,14 @@ returnButton.addEventListener("click", function() {
     questionCount = 0;
 })
 
+//Listens for click event on clear highscores button. Clears out local storage and reloads the page, sending user to start of quiz.
+
 clearButton.addEventListener("click", function() {
     localStorage.clear();
     location.reload();
 })
+
+//Listens for click on viewHighScoresButton that resets displays and generates highScoreDisplay for user to view high scores list
 
 viewHighScoresButton.addEventListener("click", function() {
     initialDisplay.classList.remove("start");
