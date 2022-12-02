@@ -7,6 +7,7 @@ var initialsInput = document.querySelector("#user-initials-input");
 var submitButton = document.querySelector("#submit-button");
 var highScoreDisplay = document.querySelector("#highscore-display");
 var highScoreList = document.querySelector("#highscores");
+var timerDisplay = document.querySelector("#timer-display");
 
 var answerChoiceOne = document.createElement("li");
 var answerChoiceTwo = document.createElement("li");
@@ -17,6 +18,7 @@ var answerChoiceBank = [answerChoiceOne, answerChoiceTwo, answerChoiceThree, ans
 var userScoreReport = document.createElement("p");
 
 var questionCount = 0;
+var timer;
 var timerCount = 60;
 
 
@@ -43,12 +45,22 @@ var questions = [
     }
 ]
 
+function setTimer () {
+    timer = setInterval(function() {
+        timerCount--;
+        timerDisplay.textContent = timerCount + " seconds remaining!";
+
+        if(timerCount === 0 || questionCount === questions.length) {
+            clearInterval(timer);
+        }
+    }, 1000);
+}
 
 function startQuiz() {
     initialDisplay.classList.remove("start");
     initialDisplay.classList.add("hidden");
     questionsDisplay.classList.remove("hidden");
-    //startTimer
+    setTimer();
     renderQuiz();
 }  
 
@@ -76,11 +88,21 @@ function endGame() {
 function recordScore(event) {
     event.preventDefault();   
     userInitials = initialsInput.value;
-    var usersScores = {
+    var usersScore = {
         initials: userInitials, 
         score: timerCount,
-    };
-    localStorage.setItem("users scores", JSON.stringify(usersScores)); 
+        };
+    var highScores = [usersScore];
+    console.log(highScores);
+    var usersScores = JSON.parse(localStorage.getItem("users scores"));
+    if (usersScores === null) {
+    var allHighScores = highScores;
+    } else {
+    console.log(usersScores);
+    allHighScores = highScores.concat(usersScores);
+    }
+    console.log(allHighScores);
+    localStorage.setItem("users scores", JSON.stringify(allHighScores)); 
     endGameDisplay.classList.remove("start");
     endGameDisplay.classList.add("hidden");
     highScoreDisplay.classList.remove("hidden");
@@ -89,9 +111,8 @@ function recordScore(event) {
 }
 
 function showHighScores() {
-    var highScores = {};
-    highScores = JSON.parse(localStorage.getItem("users scores"));
-    console.log(highScores.score);
+    var highScores = JSON.parse(localStorage.getItem("users scores"));
+    console.log(highScores);
 }
 
 function checkAnswer(userAnswer) {
