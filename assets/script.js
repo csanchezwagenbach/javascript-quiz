@@ -8,6 +8,8 @@ var submitButton = document.querySelector("#submit-button");
 var highScoreDisplay = document.querySelector("#highscore-display");
 var highScoreList = document.querySelector("#highscores");
 var timerDisplay = document.querySelector("#timer-display");
+var returnButton = document.querySelector("#return-button");
+var clearButton = document.querySelector("#clear-button");
 
 var answerChoiceOne = document.createElement("li");
 var answerChoiceTwo = document.createElement("li");
@@ -153,3 +155,18 @@ answerChoicesDisplay.addEventListener("click", function (event) {
 })
 
 submitButton.addEventListener("click", recordScore) 
+
+returnButton.addEventListener("click", function() {
+    highScoreDisplay.classList.remove("start");
+    highScoreDisplay.classList.add("hidden");
+    initialDisplay.classList.remove("hidden");
+    initialDisplay.classList.add("start");
+    timerCount = 60;
+    questionCount = 0;
+})
+
+clearButton.addEventListener("click", function() {
+    localStorage.clear();
+})
+
+
