@@ -126,6 +126,7 @@ function showHighScores() {
     }
     highScores.sort(sortScores);
     console.log(highScores);
+    highScoreList.innerHTML = "";
     for (var i = 0; i < highScores.length; i++) {
         var newHighScore = document.createElement("li");
         newHighScore.textContent = highScores[i].initials + " earned a score of " + highScores[i].score;
