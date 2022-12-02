@@ -10,6 +10,8 @@ var highScoreList = document.querySelector("#highscores");
 var timerDisplay = document.querySelector("#timer-display");
 var returnButton = document.querySelector("#return-button");
 var clearButton = document.querySelector("#clear-button");
+var viewHighScoresButton = document.querySelector("#view-highscore")
+var startButton = document.querySelector("#start-button");
 
 var answerChoiceOne = document.createElement("li");
 var answerChoiceTwo = document.createElement("li");
@@ -149,6 +151,8 @@ function checkAnswer(userAnswer) {
     }
 }
 
+startButton.addEventListener("click", startQuiz);
+
 answerChoicesDisplay.addEventListener("click", function (event) {
     if (event.target.matches("li")) {
         checkAnswer(event.target.textContent);
@@ -171,4 +175,12 @@ clearButton.addEventListener("click", function() {
     location.reload();
 })
 
-
+viewHighScoresButton.addEventListener("click", function() {
+    initialDisplay.classList.remove("start");
+    questionsDisplay.classList.remove("start");
+    endGameDisplay.classList.remove("start");
+    initialDisplay.classList.add("hidden");
+    questionsDisplay.classList.add("hidden");
+    endGameDisplay.classList.add("hidden");
+    highScoreDisplay.classList.add("start");
+})
