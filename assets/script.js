@@ -45,7 +45,7 @@ var questions = [
     {
         questionText: "Where is local storage?",
         answerText: ["Around the corner", "Hiding inside your browser!", "Local storage? No such thing", "Here, there, everywhere"],
-        correctAnswer: "Hiding inside your browswer!"
+        correctAnswer: "Hiding inside your browser!"
     }
 ]
 
@@ -54,7 +54,7 @@ function setTimer () {
         timerCount--;
         timerDisplay.textContent = timerCount + " seconds remaining!";
 
-        if(timerCount === 0 || questionCount === questions.length) {
+        if(timerCount <= 0 || questionCount === questions.length) {
             clearInterval(timer);
         }
     }, 1000);
@@ -73,6 +73,7 @@ function renderQuiz () {
         questionOnDisplay.textContent = questions[questionCount].questionText;
         for (var j = 0; j < answerChoiceBank.length; j++) {
             answerChoiceBank[j].textContent = questions[questionCount].answerText[j];
+            answerChoiceBank[j].classList.add("answer-choice");
             answerChoicesDisplay.appendChild(answerChoiceBank[j]);
         }
     }
@@ -139,7 +140,8 @@ function showHighScores() {
 
 function checkAnswer(userAnswer) {
     console.log(timerCount);
-    if (userAnswer !== questions[questionCount].correctAnswer || questionCount === questions.length) {
+    //questionCount++;
+    if (userAnswer !== questions[questionCount].correctAnswer && questionCount <= questions.length) {
     timerCount = timerCount - 10;
     questionCount++
     renderQuiz();
