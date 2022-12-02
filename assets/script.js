@@ -98,10 +98,8 @@ function recordScore(event) {
     if (usersScores === null) {
     var allHighScores = highScores;
     } else {
-    console.log(usersScores);
     allHighScores = highScores.concat(usersScores);
     }
-    console.log(allHighScores);
     localStorage.setItem("users scores", JSON.stringify(allHighScores)); 
     endGameDisplay.classList.remove("start");
     endGameDisplay.classList.add("hidden");
@@ -113,7 +111,13 @@ function recordScore(event) {
 function showHighScores() {
     var highScores = JSON.parse(localStorage.getItem("users scores"));
     console.log(highScores);
+    for (var i = 0; i < highScores.length; i++) {
+        var newHighScore = document.createElement("li");
+        newHighScore.textContent = highScores[i].initials + " earned a score of " + highScores[i].score;
+        highScoreList.appendChild(newHighScore);
+    } 
 }
+
 
 function checkAnswer(userAnswer) {
     console.log(timerCount);
@@ -136,5 +140,3 @@ answerChoicesDisplay.addEventListener("click", function (event) {
 })
 
 submitButton.addEventListener("click", recordScore) 
-
-
