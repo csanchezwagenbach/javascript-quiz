@@ -111,6 +111,19 @@ function recordScore(event) {
 function showHighScores() {
     var highScores = JSON.parse(localStorage.getItem("users scores"));
     console.log(highScores);
+    function sortScores (a, b) {
+        var scoreA = a.score;
+        var scoreB = b.score;
+        if (scoreA < scoreB) {
+            return 1;
+        } else if (scoreA > scoreB) {
+            return -1;
+        } else {
+            return 0;
+        }
+    }
+    highScores.sort(sortScores);
+    console.log(highScores);
     for (var i = 0; i < highScores.length; i++) {
         var newHighScore = document.createElement("li");
         newHighScore.textContent = highScores[i].initials + " earned a score of " + highScores[i].score;
