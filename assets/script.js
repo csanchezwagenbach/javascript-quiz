@@ -2,7 +2,9 @@ var initialDisplay = document.querySelector("#initial-display");
 var questionsDisplay = document.querySelector("#questions-display");
 var questionOnDisplay = document.querySelector("#question");
 var answerChoicesDisplay = document.querySelector("#answer-list");
-var answerChoices = document.querySelectorAll("li");
+var endGameDisplay = document.querySelector("#endgame-display");
+var initialsInput = document.querySelector("#user-initials-input");
+var submitButton = document.querySelector("#submit-button");
 
 
 var answerChoiceOne = document.createElement("li");
@@ -11,8 +13,11 @@ var answerChoiceThree = document.createElement("li");
 var answerChoiceFour = document.createElement("li");
 var answerChoiceBank = [answerChoiceOne, answerChoiceTwo, answerChoiceThree, answerChoiceFour];
 
+var userScoreReport = document.createElement("p");
+
 var questionCount = 0;
-var timerCount = 60    
+var timerCount = 60;
+var userInitials = "";    
 
 var questions = [
     {
@@ -38,10 +43,6 @@ var questions = [
 ]
 
 
-
-
-
-
 function startQuiz() {
     initialDisplay.classList.remove("start");
     initialDisplay.classList.add("hidden");
@@ -58,15 +59,36 @@ function renderQuiz () {
             answerChoicesDisplay.appendChild(answerChoiceBank[j]);
         }
     }
+    else if (questionCount === questions.length || timerCount === 0) {
+        endGame();
+    }
 }
 
+function endGame() {
+    questionsDisplay.classList.add("hidden");
+    endGameDisplay.classList.remove("hidden");
+    endGameDisplay.classList.add("start");
+    userScoreReport.textContent = "You scored a " +timerCount +"!";
+    endGameDisplay.appendChild(userScoreReport);
+}
+
+function recordScore(event) {
+    event.preventDefault();
+    userInitials = initialsInput.value;
+}
+
+
 function checkAnswer(userAnswer) {
-    if (userAnswer !== questions[questionCount].correctAnswer) {
+    console.log(timerCount);
+    if (userAnswer !== questions[questionCount].correctAnswer || questionCount === questions.length) {
     timerCount = timerCount - 10;
     questionCount++
-    } else {
+    renderQuiz();
+    } else if (timerCount > 0) {
     questionCount++
     renderQuiz();
+    } else if (timer === 0 || questionCount === questions.length) {
+        endGame();
     }
 }
 
@@ -75,4 +97,7 @@ answerChoicesDisplay.addEventListener("click", function (event) {
         checkAnswer(event.target.textContent);
     }
 })
+
+submitButton.addEventListener("click", recordScore) 
+
 
